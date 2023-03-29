@@ -4,7 +4,7 @@ import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import reportWebVitals from './reportWebVitals';
 import Signin from './Components/Admin/Signin/Signin';
 import Create from './Components/Admin/Venue/Create/Create';
-
+import './index.css'
 const router = createBrowserRouter([
   {
     path : "/admin/signin",
