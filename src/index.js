@@ -1,13 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import reportWebVitals from './reportWebVitals';
+import Signin from './Components/Admin/Signin/Signin';
+import Create from './Components/Admin/Venue/Create/Create';
+
+const router = createBrowserRouter([
+  {
+    path : "/admin/signin",
+    element : <Signin />
+  },
+  {
+    path : "/venue/create",
+    element : <Create />
+  }
+])
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
