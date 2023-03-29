@@ -1,7 +1,8 @@
 import {React, useState} from 'react'
-import { Button } from '@mui/material'
+import { Button, FormGroup } from '@mui/material'
 import publicApi from '../../../utils/publicApi'
 import { useNavigate } from 'react-router-dom'
+import { FormControl, Input } from '@material-ui/core'
 
 export default function Signin() {
     const [email, setEmail] = useState('')
@@ -9,14 +10,19 @@ export default function Signin() {
     const navigate = useNavigate()
   return (
     <div>
-        <h1>Login</h1>
-        <input type="text" placeholder='email' value={email}
-        onChange={e => setEmail(e.target.value)}
-        />
-        <input type="password" placeholder='password' value={password}
-        onChange={e => setPassword(e.target.value)}
-        />
-        <Button onClick={async () => {
+        <FormGroup>
+            <FormControl>
+            <h1>Login</h1>
+            <Input type="text" placeholder='email' value={email}
+            onChange={e => setEmail(e.target.value)}
+            />
+            </FormControl>
+            <FormControl>
+                <Input type="password" placeholder='password' value={password}
+                onChange={e => setPassword(e.target.value)}
+                />
+            </FormControl>
+            <Button onClick={async () => {
             try{
                 const res = await publicApi('post', '/admin/signin', {email, password});
                 const {accessToken, refreshToken} = res.data
@@ -27,6 +33,7 @@ export default function Signin() {
                 alert(e);
             }
         }} >Login</Button>
+        </FormGroup>
     </div>
   )
 }
