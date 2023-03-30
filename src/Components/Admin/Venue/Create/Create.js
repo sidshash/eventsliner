@@ -2,7 +2,11 @@ import {React, useState} from 'react'
 import {FormGroup, InputLabel, FormControl, Input, Button, Switch} from '@material-ui/core'
 import privateApi from '../../../../utils/privateApi';
 import storage from '../../../../firebaseConfig';
+import Select from 'react-select';
+import cuisineOptions from './cuisines'
+import featureOptions from './features'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import options from './categories'
 export default function Create() {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -13,16 +17,20 @@ export default function Create() {
   const [reservationRequired, setReservationRequired] = useState(false);
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState(["", ""]);
-  const [categories, setCategories] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [cuisines, setCuisines] = useState([]);
+  const [features, setFeatures] = useState([]);
   const [images, setImages] = useState([]);
   const [menu, setMenu] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [menuFiles, setMenuFiles] = useState('');
   const [percent, setPercent] = useState('0%');
+  const [averageCost, setAverageCost] = useState('')
+  const [bestSeller, setBestSeller] = useState('');
 
 
   const onSubmit = async () => {
-    console.log(name, address, mobile, website, timeFrom, timeTo, reservationRequired);
+    console.log(name, address, mobile, website, timeFrom, timeTo, reservationRequired, categories, cuisines, features);
     try{
       const res = await privateApi('post', '/venue/create', {
         name,
@@ -37,7 +45,11 @@ export default function Create() {
         categories,
         images,
         menu,
-        categories : categories.split(';')
+        categories,
+        cuisines,
+        features,
+        bestSeller,
+        averageCost
       });
       alert(res.message)
     }catch(e){
@@ -101,6 +113,7 @@ export default function Create() {
 
   return (
     <FormGroup>
+      <h2>Add Venue</h2>
       <FormControl>
         <InputLabel>Name</InputLabel>
         <Input value={name} onChange={e => setName(e.target.value)} />
@@ -116,6 +129,14 @@ export default function Create() {
       <FormControl>
         <InputLabel>Website</InputLabel>
         <Input value={website} onChange={e => setWebsite(e.target.value)} />
+      </FormControl>
+      <FormControl>
+        <InputLabel>Best Seller</InputLabel>
+        <Input value={bestSeller} onChange={e => setBestSeller(e.target.value)} />
+      </FormControl>
+      <FormControl>
+        <InputLabel>Average Cost</InputLabel>
+        <Input value={averageCost} onChange={e => setAverageCost(e.target.value)} />
       </FormControl>
       <FormControl>
         <InputLabel>Description</InputLabel>
@@ -137,10 +158,10 @@ export default function Create() {
           setLocation(arr);
         }} />
       </FormControl>
-      <FormControl>
-        <InputLabel>Categories (separeted by ;)</InputLabel>
-        <Input value={categories} onChange={e => setCategories(e.target.value)} />
-      </FormControl>
+        <InputLabel> Categories </InputLabel>
+          <Select onChange={e => setCategories(e.map(n => n.label))} isMulti options={options}></Select>
+          <Select onChange={e => setCuisines(e.map(n => n.label))} isMulti options={cuisineOptions}></Select>
+          <Select onChange={e => setFeatures(e.map(n => n.label))} isMulti options={featureOptions}></Select>
       <FormControl>
         <InputLabel>Images {percent}</InputLabel>
         <Input type='file' onChange={e => {
