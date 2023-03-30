@@ -4,11 +4,15 @@ import { maxWidth } from '@mui/system';
 import SearchIcon from '@mui/icons-material/Search';
 import {React, useState, useEffect} from 'react'
 import publicApi from '../../../utils/publicApi';
+import { useNavigate } from 'react-router-dom';
+import logo from '../../../Assets/logo.png'
 
 export default function Venue() {
     const [venues, setVenues] = useState([
         
     ]);
+
+    const navigate = useNavigate()
     useEffect(() => {
         publicApi('get', '/venue')
             .then(res => {
@@ -16,18 +20,27 @@ export default function Venue() {
             })
     }, [])
   return (
-    <div className="container overflow-hidden w-full">
-        <div className="search-bar flex fixed w-full bg-white">
-            <Input className='searchbox w-full'/>
-            <SearchIcon />
+    <div className="container overflow-y-auto w-screen">
+        <div className="header flex-col fixed bg-white w-screen">
+            <div className='flex justify-center'>
+                {/* <img src={logo} className='h-20' alt="logo" /> */}
+                <p className='text-center font-bold text-xl'>Eventsliner</p>
+            </div>
+            <div className="search-bar flex w-full ">
+                <Input className='searchbox w-full'/>
+                <SearchIcon />
+            </div>
         </div>
-        <div className="venue-container w-full h-screen bg-gray-200">
+        <div className="venue-container w-screen h-screen flex-col my-16 bg-gray-200">
+            <p>Venues Near You</p>
             {
                 venues.map(venue => {
                     return(
-                    <div className="venue-card bg-white flex-col rounded-lg p-1 m-1 w-fit">
+                    <div onClick={() => {
+                        navigate('/venue/' + venue.id)
+                    }} className="bg-white rounded-lg p-1 h-fit m-2 shadow-md">
                         <div className="card-image rounded-md">
-                            <img src={venue.images[0]} alt="" className="bg-cover card-image rounded-md max-w-45 w-44" />
+                            <img src={venue.images[0]} alt="" className="bg-cover card-image rounded-md h-56 w-screen object-cover" height={10} />
                         </div>
                         <div className="card-contents p-2">
                             <div className="card-name">
@@ -38,7 +51,7 @@ export default function Venue() {
                                     {venue.address}
                                 </p>
                                 <p className="card-cuisines text-black text-xs">
-                                    {['Tea', 'Coffee'].join(', ')}
+                                    {venue.cuisines.join(', ')}
                                 </p>
                             </div>
                             

@@ -7,6 +7,9 @@ import cuisineOptions from './cuisines'
 import featureOptions from './features'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import options from './categories'
+
+let images = [];
+  let menu = [];
 export default function Create() {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -20,8 +23,9 @@ export default function Create() {
   const [categories, setCategories] = useState([]);
   const [cuisines, setCuisines] = useState([]);
   const [features, setFeatures] = useState([]);
-  const [images, setImages] = useState([]);
-  const [menu, setMenu] = useState([]);
+  // const [images, setImages] = useState([]);
+  // const [menu, setMenu] = useState([]);
+  
   const [imageFiles, setImageFiles] = useState([]);
   const [menuFiles, setMenuFiles] = useState('');
   const [percent, setPercent] = useState('0%');
@@ -30,7 +34,7 @@ export default function Create() {
 
 
   const onSubmit = async () => {
-    console.log(name, address, mobile, website, timeFrom, timeTo, reservationRequired, categories, cuisines, features);
+    console.log(name, address, mobile, website, timeFrom, timeTo, reservationRequired, categories, cuisines, features, images, menu);
     try{
       const res = await privateApi('post', '/venue/create', {
         name,
@@ -93,14 +97,16 @@ export default function Create() {
             // download url
             getDownloadURL(uploadTask.snapshot.ref).then((url) => {
                 if(path == '/images'){
-                    let arr = [...images];
-                    arr.push(url);
-                    setImages(arr);
+                    // let arr = [...images, url];
+                    images.push(url);
+                    // setImages(arr);
+                    console.log(images)
                     res('ok')
             }else{
-              let arr = [...menu];
-              arr.push(url);
-              setMenu(arr);
+              // let arr = [...menu, url];
+              menu.push(url)
+              console.log(menu)
+              // setMenu(arr);
                    res('ok')
             }
             });
@@ -112,7 +118,7 @@ export default function Create() {
 
 
   return (
-    <FormGroup>
+    <FormGroup className='p-3'>
       <h2>Add Venue</h2>
       <FormControl>
         <InputLabel>Name</InputLabel>
@@ -158,27 +164,31 @@ export default function Create() {
           setLocation(arr);
         }} />
       </FormControl>
-        <InputLabel> Categories </InputLabel>
-          <Select onChange={e => setCategories(e.map(n => n.label))} isMulti options={options}></Select>
-          <Select onChange={e => setCuisines(e.map(n => n.label))} isMulti options={cuisineOptions}></Select>
-          <Select onChange={e => setFeatures(e.map(n => n.label))} isMulti options={featureOptions}></Select>
+      <div className="categories p-3">
+      <InputLabel> Categories </InputLabel>
+          <Select className='m-2' onChange={e => setCategories(e.map(n => n.label))} isMulti options={options}></Select>
+          <Select className='m-2' onChange={e => setCuisines(e.map(n => n.label))} isMulti options={cuisineOptions}></Select>
+          <Select className='m-2' onChange={e => setFeatures(e.map(n => n.label))} isMulti options={featureOptions}></Select>
+      </div>
+
       <FormControl>
         <InputLabel>Images {percent}</InputLabel>
-        <Input type='file' onChange={e => {
-          let files = [...imageFiles];
-          files.push(e.target.files[0]);
-          setImageFiles(files);
-          console.log(files);
+        <Input type='file' inputProps={{multiple : true}} onChange={e => {
+          // let files = [...imageFiles];
+          // files.push(e.target.files[0]);
+          setImageFiles(e.target.files);
+          
+          console.log(e.target.files);
         }} />
       </FormControl>
       <Button onClick={handleImagesUpload}>Upload Images</Button>
       <FormControl>
         <InputLabel>Menu {percent}</InputLabel>
-        <Input type='file' onChange={e => {
-          let files = [...menuFiles];
-          files.push(e.target.files[0]);
-          setMenuFiles(files);
-          console.log(files);
+        <Input type='file' inputProps={{multiple : true}} onChange={e => {
+          // let files = [...menuFiles];
+          // files.push(e.target.files[0]);
+          setMenuFiles(e.target.files);
+          console.log(e.target.files);
         }} />
       </FormControl>
       <Button onClick={handleMenuUpload}>upload menu</Button>
@@ -191,10 +201,10 @@ export default function Create() {
         <Input type='time' value={timeTo} onChange={e => setTimeTo(e.target.value)}/>
       </FormControl>
       <FormControl>
-        <InputLabel>Reservation Required</InputLabel>
-        <Switch checked={reservationRequired} onChange={e => setReservationRequired(e.target.checked)}/>
+        <Switch className='m-2' checked={reservationRequired} onChange={e => setReservationRequired(e.target.checked)}/>
+        <p>Reservation Required?</p>
       </FormControl>
-     <Button variant='contained' onClick={onSubmit} color='blue'>Submit</Button>
+     <Button className={'block'} variant={'contained'} onClick={onSubmit} color='blue'>Submit</Button>
     </FormGroup>
   )
 }
