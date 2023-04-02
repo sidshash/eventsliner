@@ -44,4 +44,10 @@ export default [
     {value : "dessert", label : "Dessert"},
     {value : "iceCream", label : "Ice-Cream"},
     {value : "pizza", label : "Pizza"},
+    {value : "chaat", label : "Chaat"},
+    {value : "chaap", label : "Chaap"},
+    {value : "tandoor", label : "Tandoor"},
+    {value : "breakfast", label : "Breakfast"},
+    {value : "beverages", label : "Beverages"},
+    {value : "littiChokha", label : "Litti Choka"},
 ]

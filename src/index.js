@@ -7,6 +7,7 @@ import Create from './Components/Admin/Venue/Create/Create';
 import './index.css'
 import Venue from './Components/Admin/Venue/Venue';
 import VenuePage from './Components/Admin/Venue/byId/VenuePage';
+import Edit from './Components/Admin/Venue/Edit/Edit';
 const router = createBrowserRouter([
   {
     path : "/admin/signin",
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path : '/venue/:id',
     element : <VenuePage />
+  },
+  {
+    path : '/venue/:id/edit',
+    element : <Edit/>
   }
 ])
 

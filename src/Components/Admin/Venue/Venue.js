@@ -14,7 +14,7 @@ export default function Venue() {
 
     const navigate = useNavigate()
     useEffect(() => {
-        publicApi('get', '/venue')
+        publicApi('get', '/venue' + window.location.search)
             .then(res => {
                 setVenues(res.data);
             })
